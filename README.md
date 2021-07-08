@@ -14,7 +14,7 @@
 
 ## en-US
 
-Fundamental Experiment of Digital Logic and Processor——Pipeline CPU  
+The big homework of Fundamental Experiment of Digital Logic and Processor——Pipeline CPU  
 
 Tool: Vivado 2017.9  
 
