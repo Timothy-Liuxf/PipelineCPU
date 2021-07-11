@@ -22,8 +22,8 @@
 
 module InstMem
 (
-    input wire [32:0] ReadAddr,
-    output wire [32:0] ReadInst
+    input wire [31:0] ReadAddr,
+    output wire [31:0] ReadInst
 );
 
 assign ReadInst = 0;

@@ -15,7 +15,7 @@
 // 
 // Revision: None
 // Revision 0.01 - File Created
-// Additional Comments:
+// Additional Comments: None
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -25,11 +25,10 @@ module ImmExtend
     input wire [15:0] in,
     input wire LuiOp,
     input wire SignedOp,
-    output wire [31:0] out_ext,
-    output wire [31:0] out_shift
+    output wire [31:0] out_ext
 );
 
-assign out_shift = {{14{in[15]}}, in, 2'b00};
+// assign out_shift = {{14{in[15]}}, in, 2'b00};
 assign out_ext = LuiOp ? {in, 16'h0} :
                 SignedOp ? {{16{in[15]}}, in} :
                 {16'h0, in};

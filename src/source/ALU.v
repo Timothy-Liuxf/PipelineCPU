@@ -15,7 +15,7 @@
 // 
 // Revision: None
 // Revision 0.01 - File Created
-// Additional Comments:
+// Additional Comments: None
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -64,7 +64,7 @@ always @(*) begin
         sll_op      : out <= (in2 << in1[4:0]);
         srl_op      : out <= (in2 >> in1[4:0]);
         sra_op      : out <= ({{32{in2[31]}}, in2} >> in1[4:0]);
-        gtz_op      : out <= in1[31] == 0;
+        gtz_op      : out <= (in1[31] == 0 && in1 != 0);
         default: out <= 0;
     endcase
 end

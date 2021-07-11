@@ -24,8 +24,8 @@ module PC
 (
     input wire clk,
     input wire reset,
-    input wire PC_i,
-    output reg PC_o
+    input wire [31:0] PC_i,
+    output reg [31:0] PC_o
 );
 
 initial begin
