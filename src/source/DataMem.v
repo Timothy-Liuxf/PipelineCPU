@@ -37,12 +37,12 @@ module DataMem
 parameter MEM_SIZE = 512;
 wire [29:0] word_addr;
 
-reg [31:0] data [MEM_SIZE - 1];
+reg [31:0] data [MEM_SIZE - 1:0];
 
 assign word_addr = addr[31:2];
 assign ReadData = MemRead == 0 ? 0 :
                     word_addr < MEM_SIZE ? data[word_addr] :
-                    word_addr == 30'b0100_0000_0000_0000_0000_0000_0000_11 ? leds :
+                    word_addr == 30'b0100_0000_0000_0000_0000_0000_0000_11 ? {24'h0, leds} :
                     word_addr == 30'b0100_0000_0000_0000_0000_0000_0001_00 ? {20'h0, AN, BCD} :
                     0;
 

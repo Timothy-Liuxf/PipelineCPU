@@ -44,7 +44,7 @@ module ID_EX_Reg
     input wire [31:0] ID_PC_Plus_4,
     input wire [4:0] ID_Shamt,
     input wire [4:0] ID_rt,
-    input wire [4:0] ID_rd,
+    input wire [4:0] ID_rd
 );
 
 reg RegWr;
