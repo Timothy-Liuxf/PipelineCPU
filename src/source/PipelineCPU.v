@@ -26,7 +26,7 @@ module PipelineCPU
     input wire reset,
     output wire [7:0] leds,
     output wire [3:0] AN,
-    output wire [3:0] BCD
+    output wire [7:0] BCD
 );
 
 wire [31:0] PC_i;
@@ -37,6 +37,7 @@ wire [31:0] ReadInst;
 InstMem InstMem(PC_o, ReadInst);
 
 wire IF_ID_Flush;
+assign IF_ID_Flush = 0;     //////////////////////////////////////
 wire [5:0] OpCode;
 wire [4:0] rs;
 wire [4:0] rt;
@@ -112,21 +113,22 @@ Controller Controller
 
 
 wire [31:0] J_out;
-assign J_out = Jump == 0 ? PC_Plus_4 :
+assign J_out = Jump == 0 ? (PC_o + 4) :
                 JumpSrc == 0 ? {PC_Plus_4[31:28], rs, rt, rd, Shamt, Funct, 2'b00} :
                 ReadData1;
 
 
-wire out_ext;
+wire [31:0] out_ext;
 ImmExtend ImmExtend
     (
         .in({rd, Shamt, Funct}),
         .LuiOp(LuiOp),
         .SignedOp(SignedOp),
-        .out_ext(out_Ext)
+        .out_ext(out_ext)
     );
 
 wire ID_EX_Flush;
+assign ID_EX_Flush = 0;
 ID_EX_Reg ID_EX_Reg
     (
         .clk(clk),
@@ -186,13 +188,10 @@ EX_MEM_Reg EX_MEM_Reg
 
         .EX_MemRead  (ID_EX_Reg.MemRead  ),
         .EX_MemWrite (ID_EX_Reg.MemWrite ),
-        .EX_Addr     (ID_EX_Reg.Addr     ),
         .EX_WriteData(ID_EX_Reg.ReadData2),
         .EX_WriteAddr(EX_WriteAddr       ),
         .EX_MemtoReg (ID_EX_Reg.MemtoReg ),
         .EX_RegWrite (ID_EX_Reg.RegWr    ),
-        .EX_MemRead  (ID_EX_Reg.MemRead  ),
-        .EX_MemWrite (ID_EX_Reg.MemWrite ),
         .EX_ALU_out  (ALU_out            ),
         .EX_PC_Plus_4(ID_EX_Reg.PC_Plus_4)
     );
@@ -229,8 +228,8 @@ MEM_WB_Reg MEM_WB_Reg
 assign MEM_WB_WriteAddr = MEM_WB_Reg.WriteAddr;
 assign MEM_WB_RegWr = MEM_WB_Reg.RegWr;
 assign MEM_WB_WriteData =
-                MEM_WB_Reg.MemtoReg == 2'b00 ? MEM_WB_Reg.ALU_out :
+                MEM_WB_Reg.MemtoReg == 2'b00 ? MEM_WB_Reg.ALU_result :
                 MEM_WB_Reg.MemtoReg == 2'b01 ? MEM_WB_Reg.ReadData :
-                MEM_WB.PC_next;
+                MEM_WB_Reg.PC_next;
 
 endmodule

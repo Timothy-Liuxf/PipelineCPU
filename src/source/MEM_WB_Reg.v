@@ -27,7 +27,7 @@ module MEM_WB_Reg
 
     input wire MEM_RegWr,
     input wire [1:0] MEM_MemtoReg,
-    input wire [31:0] MEM_WriteAddr,
+    input wire [4:0] MEM_WriteAddr,
     input wire [31:0] MEM_ReadData,
     input wire [31:0] MEM_ALU_result,
     input wire [31:0] MEM_PC_next
@@ -35,7 +35,7 @@ module MEM_WB_Reg
 
 reg RegWr;
 reg [1:0] MemtoReg;
-reg [31:0] WriteAddr;
+reg [4:0] WriteAddr;
 reg [31:0] ReadData;
 reg [31:0] ALU_result;
 reg [31:0] PC_next;

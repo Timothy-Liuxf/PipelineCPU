@@ -22,20 +22,19 @@
 
 module TestBench();
 
-    wire clk;
-    wire reset;
+    reg clk;
+    reg reset;
     wire [3:0] AN;
     wire [7:0] BCD;
     wire [7:0] leds;
 
-    PipelineCPU(clk, reset, leds, AN, BCD);
+    PipelineCPU PipelineCPU(clk, reset, leds, AN, BCD);
 
     initial begin
         clk <= 0;
         reset <= 0;
-        forever begin
-            #5 clk <= ~clk;
-        end
     end
+    
+    always #5 clk <= ~clk;
     
 endmodule
