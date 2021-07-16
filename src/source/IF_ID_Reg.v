@@ -25,6 +25,7 @@ module IF_ID_Reg
     input wire clk,
     input wire reset,
     input wire flush,
+    input wire hold,
     input wire [31:0] ReadInst,
     input wire [31:0] IF_PC_Plus_4,
     output reg [5:0] OpCode,
@@ -57,13 +58,15 @@ always @(posedge clk or posedge reset) begin
         PC_Plus_4 <= 0;
     end
     else begin
-        OpCode <= ReadInst[31:26];
-        rs <= ReadInst[25:21];
-        rt <= ReadInst[20:16];
-        rd <= ReadInst[15:11];
-        Shamt <= ReadInst[10:6];
-        Funct <= ReadInst[5:0];
-        PC_Plus_4 <= IF_PC_Plus_4;
+        if (!hold) begin
+            OpCode <= ReadInst[31:26];
+            rs <= ReadInst[25:21];
+            rt <= ReadInst[20:16];
+            rd <= ReadInst[15:11];
+            Shamt <= ReadInst[10:6];
+            Funct <= ReadInst[5:0];
+            PC_Plus_4 <= IF_PC_Plus_4;
+        end
     end
 end
 

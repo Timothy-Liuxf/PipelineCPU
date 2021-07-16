@@ -25,6 +25,7 @@ module PC
     input wire clk,
     input wire reset,
     input wire [31:0] PC_i,
+    input wire PC_Hold,
     output reg [31:0] PC_o
 );
 
@@ -37,7 +38,7 @@ always @(posedge clk or posedge reset) begin
         PC_o <= 0;
     end
     else begin
-        PC_o <= PC_i;
+        if (!PC_Hold) PC_o <= PC_i;
     end
 end
 

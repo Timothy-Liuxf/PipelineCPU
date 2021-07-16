@@ -24,12 +24,11 @@ module BranchAndJumpHazard
 (
     input wire Jump,
     input wire no_branch,
-    input wire MemRead,
     output wire IF_ID_Flush,
     output wire ID_EX_Flush
 );
 
-assign IF_ID_Flush = Jump || !no_branch || MemRead;
+assign IF_ID_Flush = Jump || !no_branch;
 assign ID_EX_Flush = !no_branch;
 
 endmodule

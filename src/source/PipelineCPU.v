@@ -31,7 +31,8 @@ module PipelineCPU
 
 wire [31:0] PC_i;
 wire [31:0] PC_o;
-PC PC(clk, reset, PC_i, PC_o);
+wire PC_Hold;
+PC PC(clk, reset, PC_i, PC_Hold, PC_o);
 
 wire [31:0] ReadInst;
 InstMem InstMem(PC_o, ReadInst);
@@ -44,11 +45,13 @@ wire [4:0] rd;
 wire [4:0] Shamt;
 wire [5:0] Funct;
 wire [31:0] PC_Plus_4;
+wire IF_ID_Hold;
 IF_ID_Reg IF_ID_Reg
     (
         .clk(clk),
         .reset(reset),
         .flush(IF_ID_Flush),
+        .hold(IF_ID_Hold),
         .ReadInst(ReadInst),
         .IF_PC_Plus_4(PC_o + 4),
         .OpCode(OpCode),
@@ -232,6 +235,7 @@ assign MEM_WB_WriteData =
                 MEM_WB_Reg.MemtoReg == 2'b01 ? MEM_WB_Reg.ReadData :
                 MEM_WB_Reg.PC_next;
 
+wire LW_Stall;
 DataHazard DataHazard
     (
         .ID_EX_RegWrite(ID_EX_Reg.RegWr),
@@ -240,19 +244,25 @@ DataHazard DataHazard
         .EX_MEM_WriteAddr(EX_MEM_Reg.WriteAddr),
         .rs(rs),
         .rt(rt),
+        .ID_EX_MemRead(ID_EX_Reg.MemRead),
         .ForwardA(ForwardA),
-        .ForwardB(ForwardB)
+        .ForwardB(ForwardB),
+        .LW_Stall(LW_Stall)
     );
 
+assign PC_Hold = LW_Stall;
+assign IF_ID_Hold = LW_Stall;
+
+wire Branch_ID_EX_Flush;
 BranchAndJumpHazard BranchAndJumpHazard
     (
         .Jump(Jump),
         .no_branch(no_branch),
-        .MemRead(MemRead),
         .IF_ID_Flush(IF_ID_Flush),
-        .ID_EX_Flush(ID_EX_Flush)
+        .ID_EX_Flush(Branch_ID_EX_Flush)
     );
 
+assign ID_EX_Flush = Branch_ID_EX_Flush || LW_Stall;
 
 // assign ReadData1Actual = ID_EX_Reg.ReadData1;
 // assign ReadData2Actual = ID_EX_Reg.ReadData2;

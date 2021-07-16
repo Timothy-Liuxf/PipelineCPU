@@ -104,7 +104,7 @@ always @(*) begin
 
     // ALUSrcB: 0-ReadData2, 1-imm
     case (OpCode)
-    6'h0f, 6'h08, 6'h09, 6'h0c, 6'h0b: ALUSrcB <= 1;
+    6'h0f, 6'h08, 6'h09, 6'h0c, 6'h0b, 6'h23, 6'h2b: ALUSrcB <= 1;
     default: ALUSrcB <= 0;
     endcase
 
