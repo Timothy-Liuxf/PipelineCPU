@@ -39,15 +39,15 @@ assign ReadInst =
     ReadAddr[31:2] == 30'h9   ? 32'hac090004 :   // sw $t1, 4($zero)
     ReadAddr[31:2] == 30'hA   ? 32'h8c0d0004 :   // lw $t5, 4($zero)
     ReadAddr[31:2] == 30'hB   ? 32'h00000020 :   // add $zero, $zero, $zero
-    ReadAddr[31:2] == 30'hC   ? 32'h00000020 :   // j
-    ReadAddr[31:2] == 30'hD   ? 32'h00000020 :   // j
-    ReadAddr[31:2] == 30'hE   ? 32'h100dfff1 :   // j
-    ReadAddr[31:2] == 30'hF   ? 32'h00000020 :   // j
-    ReadAddr[31:2] == 30'h10  ? 32'h1400ffef :   // j
-    ReadAddr[31:2] == 30'h11  ? 32'h00000020 :   // j
-    ReadAddr[31:2] == 30'h12  ? 32'h00000020 :   // j
-    ReadAddr[31:2] == 30'h13  ? 32'h00000020 :   // j
-    ReadAddr[31:2] == 30'h14  ? 32'h08000014 :   // j
+    ReadAddr[31:2] == 30'hC   ? 32'h00000020 :   // 
+    ReadAddr[31:2] == 30'hD   ? 32'h00000020 :   // 
+    ReadAddr[31:2] == 30'hE   ? 32'h100dfff1 :   // 
+    ReadAddr[31:2] == 30'hF   ? 32'h00000020 :   // 
+    ReadAddr[31:2] == 30'h10  ? 32'h1400ffef :   // 
+    ReadAddr[31:2] == 30'h11  ? 32'h00000020 :   // 
+    ReadAddr[31:2] == 30'h12  ? 32'h00000020 :   // 
+    ReadAddr[31:2] == 30'h13  ? 32'h00000020 :   // 
+    ReadAddr[31:2] == 30'h14  ? 32'h08000014 :   // 
 
     0;
 

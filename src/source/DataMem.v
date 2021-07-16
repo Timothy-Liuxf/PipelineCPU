@@ -54,7 +54,7 @@ initial begin
     BCD <= 0;
 
     for (j = 0; j < MEM_SIZE; j = j + 1) begin
-        data[j] = 0;
+        data[j] <= 0;
     end
 end
 
@@ -66,23 +66,25 @@ always @(posedge clk or posedge reset) begin
         BCD <= 0;
 
         for (i = 0; i < MEM_SIZE; i = i + 1) begin
-            data[i] = 0;
+            data[i] <= 0;
         end
     end
     else begin
-        if (word_addr < MEM_SIZE) begin
-            data[word_addr] <= WriteData;
-        end
-        else begin
-            case (word_addr)
-            30'b0100_0000_0000_0000_0000_0000_0000_11: begin
-                leds <= WriteData[7:0];
+        if (MemWrite) begin
+            if (word_addr < MEM_SIZE) begin
+                data[word_addr] <= WriteData;
             end
-            30'b0100_0000_0000_0000_0000_0000_0001_00: begin
-                BCD <= WriteData[7:0];
-                AN <= WriteData[11:8];
+            else begin
+                case (word_addr)
+                30'b0100_0000_0000_0000_0000_0000_0000_11: begin
+                    leds <= WriteData[7:0];
+                end
+                30'b0100_0000_0000_0000_0000_0000_0001_00: begin
+                    BCD <= WriteData[7:0];
+                    AN <= WriteData[11:8];
+                end
+                endcase
             end
-            endcase
         end
     end
 end

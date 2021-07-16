@@ -47,14 +47,14 @@ assign ReadData2 =
 integer j;
 initial begin
     for (j = 1; j < 32; j = j + 1) begin
-        data[j] = 0;
+        data[j] <= 0;
     end
 end
 integer i;
 always @(posedge clk or posedge reset) begin
     if (reset) begin
         for (i = 1; i < 32; i = i + 1) begin
-            data[i] = 0;
+            data[i] <= 0;
         end
     end
     else begin

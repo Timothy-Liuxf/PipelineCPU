@@ -37,7 +37,6 @@ wire [31:0] ReadInst;
 InstMem InstMem(PC_o, ReadInst);
 
 wire IF_ID_Flush;
-assign IF_ID_Flush = 0;     //////////////////////////////////////
 wire [5:0] OpCode;
 wire [4:0] rs;
 wire [4:0] rt;
@@ -77,6 +76,11 @@ RegFile RegFile
         .ReadData2(ReadData2)
     );
 
+wire [31:0] ReadData1Actual;
+wire [31:0] ReadData2Actual;
+wire [1:0] ForwardA;
+wire [1:0] ForwardB;
+
 wire RegWr;
 wire Branch;
 wire BranchClip;
@@ -115,7 +119,7 @@ Controller Controller
 wire [31:0] J_out;
 assign J_out = Jump == 0 ? (PC_o + 4) :
                 JumpSrc == 0 ? {PC_Plus_4[31:28], rs, rt, rd, Shamt, Funct, 2'b00} :
-                ReadData1;
+                ReadData1Actual;
 
 
 wire [31:0] out_ext;
@@ -128,7 +132,6 @@ ImmExtend ImmExtend
     );
 
 wire ID_EX_Flush;
-assign ID_EX_Flush = 0;
 ID_EX_Reg ID_EX_Reg
     (
         .clk(clk),
@@ -146,8 +149,8 @@ ID_EX_Reg ID_EX_Reg
         .ID_ALUOp       (ALUOp      ),
         .ID_RegDst      (RegDst     ),
 
-        .ID_ReadData1   (ReadData1  ),
-        .ID_ReadData2   (ReadData2  ),
+        .ID_ReadData1   (ReadData1Actual  ),
+        .ID_ReadData2   (ReadData2Actual  ),
         .ID_imm_ext     (out_ext    ),
 
         .ID_PC_Plus_4   (PC_Plus_4  ),
@@ -162,19 +165,16 @@ wire [31:0] ALU_in2;
 wire [31:0] ALU_out;
 wire ALU_zero;
 
-wire [31:0] ReadData1Actual;
-wire [31:0] ReadData2Actual;
-assign ReadData1Actual = ID_EX_Reg.ReadData1;
-assign ReadData2Actual = ID_EX_Reg.ReadData2;
-
-assign ALU_in1 = ID_EX_Reg.ALUSrcA == 0 ? ReadData1Actual :
-                { 27'h0, Shamt };
-assign ALU_in2 = ID_EX_Reg.ALUSrcB == 0 ? ReadData2Actual :
+assign ALU_in1 = ID_EX_Reg.ALUSrcA == 0 ? ID_EX_Reg.ReadData1 :
+                { 27'h0, ID_EX_Reg.Shamt };
+assign ALU_in2 = ID_EX_Reg.ALUSrcB == 0 ? ID_EX_Reg.ReadData2 :
                 ID_EX_Reg.imm_ext;
 
 ALU ALU(ALU_in1, ALU_in2, ID_EX_Reg.ALUOp, ALU_out, ALU_zero);
 
-assign PC_i = (ID_EX_Reg.Branch == 0 || !(ALU_zero ^ ID_EX_Reg.BranchClip)) ? J_out :
+wire no_branch;
+assign no_branch = (ID_EX_Reg.Branch == 0 || !(ALU_zero ^ ID_EX_Reg.BranchClip));
+assign PC_i = no_branch ? J_out :
                 ID_EX_Reg.PC_Plus_4 + (ID_EX_Reg.imm_ext << 2);
 
 wire [4:0] EX_WriteAddr;
@@ -231,5 +231,50 @@ assign MEM_WB_WriteData =
                 MEM_WB_Reg.MemtoReg == 2'b00 ? MEM_WB_Reg.ALU_result :
                 MEM_WB_Reg.MemtoReg == 2'b01 ? MEM_WB_Reg.ReadData :
                 MEM_WB_Reg.PC_next;
+
+DataHazard DataHazard
+    (
+        .ID_EX_RegWrite(ID_EX_Reg.RegWr),
+        .ID_EX_WriteAddr(EX_WriteAddr),
+        .EX_MEM_RegWrite(EX_MEM_Reg.RegWrite),
+        .EX_MEM_WriteAddr(EX_MEM_Reg.WriteAddr),
+        .rs(rs),
+        .rt(rt),
+        .ForwardA(ForwardA),
+        .ForwardB(ForwardB)
+    );
+
+BranchAndJumpHazard BranchAndJumpHazard
+    (
+        .Jump(Jump),
+        .no_branch(no_branch),
+        .MemRead(MemRead),
+        .IF_ID_Flush(IF_ID_Flush),
+        .ID_EX_Flush(ID_EX_Flush)
+    );
+
+
+// assign ReadData1Actual = ID_EX_Reg.ReadData1;
+// assign ReadData2Actual = ID_EX_Reg.ReadData2;
+
+assign ReadData1Actual =
+        ForwardA == 2'b01 ? ALU_out :
+        ForwardA == 2'b10 ?
+            (
+                EX_MEM_Reg.MemtoReg == 2'b00 ? EX_MEM_Reg.ALU_out :
+                EX_MEM_Reg.MemtoReg == 2'b01 ? DataMemReadData :
+                EX_MEM_Reg.PC_Plus_4
+            ) :
+        ReadData1;
+
+assign ReadData2Actual =
+        ForwardB == 2'b01 ? ALU_out :
+        ForwardB == 2'b10 ?
+            (
+                EX_MEM_Reg.MemtoReg == 2'b00 ? EX_MEM_Reg.ALU_out :
+                EX_MEM_Reg.MemtoReg == 2'b01 ? DataMemReadData :
+                EX_MEM_Reg.PC_Plus_4
+            ) :
+        ReadData2;
 
 endmodule
