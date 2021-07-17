@@ -27,32 +27,29 @@ module InstMem
 );
 
 assign ReadInst = 
-    ReadAddr[31:2] == 30'h0    ? 32'h20090001 :
-    ReadAddr[31:2] == 30'h1    ? 32'h200a0002 :
-    ReadAddr[31:2] == 30'h2    ? 32'h08000006 :
-    ReadAddr[31:2] == 30'h3    ? 32'h08000005 :
-    ReadAddr[31:2] == 30'h4    ? 32'h200b0003 :
-    ReadAddr[31:2] == 30'h5    ? 32'h200c0004 :
-    ReadAddr[31:2] == 30'h6    ? 32'h200d0005 :
-    ReadAddr[31:2] == 30'h7    ? 32'h20040028 :
-    ReadAddr[31:2] == 30'h8    ? 32'h00800008 :
-    ReadAddr[31:2] == 30'h9    ? 32'h20a50005 :
-    ReadAddr[31:2] == 30'hA    ? 32'h20c6000a :
-    ReadAddr[31:2] == 30'hB    ? 32'h20ce000a :
-    ReadAddr[31:2] == 30'hC    ? 32'h0c00000e :
-    ReadAddr[31:2] == 30'hD    ? 32'h21cf000a :
-    ReadAddr[31:2] == 30'hE    ? 32'h21ce0005 :
-    ReadAddr[31:2] == 30'hF    ? 32'h20080054 :
-    ReadAddr[31:2] == 30'h10   ? 32'hac080008 :
-    ReadAddr[31:2] == 30'h11   ? 32'h8c090008 :
-    ReadAddr[31:2] == 30'h12   ? 32'h0120f809 :
-    ReadAddr[31:2] == 30'h13   ? 32'h20040001 :
-    ReadAddr[31:2] == 30'h14   ? 32'h20050002 :
-    ReadAddr[31:2] == 30'h15   ? 32'h23e60003 :
-    ReadAddr[31:2] == 30'h16   ? 32'h00000020 :
-    ReadAddr[31:2] == 30'h17   ? 32'h00000020 :
-    ReadAddr[31:2] == 30'h19   ? 32'h00000020 :
-    ReadAddr[31:2] == 30'h16   ? 32'h08000019 :
+    ReadAddr[10:2] == 9'h0    ? 32'h08100001 :
+    ReadAddr[10:2] == 9'h1    ? 32'h20080005 :
+    ReadAddr[10:2] == 9'h2    ? 32'h20090005 :
+    ReadAddr[10:2] == 9'h3    ? 32'h11080001 :
+    ReadAddr[10:2] == 9'h4    ? 32'h200a000a :
+    ReadAddr[10:2] == 9'h5    ? 32'h212b0005 :
+    ReadAddr[10:2] == 9'h6    ? 32'h1169fffe :
+    ReadAddr[10:2] == 9'h7    ? 32'h010b5820 :
+    ReadAddr[10:2] == 9'h8    ? 32'h000b6022 :
+    ReadAddr[10:2] == 9'h9    ? 32'h19800001 :
+    ReadAddr[10:2] == 9'hA    ? 32'h2004000a :
+    ReadAddr[10:2] == 9'hB    ? 32'h18000001 :
+    ReadAddr[10:2] == 9'hC    ? 32'h20050014 :
+    ReadAddr[10:2] == 9'hD    ? 32'h1960ffff :
+    ReadAddr[10:2] == 9'hE    ? 32'h01054020 :
+    ReadAddr[10:2] == 9'hF    ? 32'h0400fffd :
+    ReadAddr[10:2] == 9'h10   ? 32'h01084020 :
+    ReadAddr[10:2] == 9'h11   ? 32'h0500fffb :
+    ReadAddr[10:2] == 9'h12   ? 32'h01094820 :
+    ReadAddr[10:2] == 9'h13   ? 32'h05800001 :
+    ReadAddr[10:2] == 9'h14   ? 32'h01294820 :
+    ReadAddr[10:2] == 9'h15   ? 32'h1d20ffff :
+    ReadAddr[10:2] == 9'h16   ? 32'h08100005 :
     0;
 
 endmodule

@@ -30,12 +30,12 @@ module PC
 );
 
 initial begin
-    PC_o <= 0;
+    PC_o <= 32'h00400000;
 end
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        PC_o <= 0;
+        PC_o <= 32'h00400000;
     end
     else begin
         if (!PC_Hold) PC_o <= PC_i;
