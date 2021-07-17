@@ -48,7 +48,7 @@ initial begin
 end
 
 always @(posedge clk or posedge reset) begin
-    if (reset || flush) begin
+    if (reset || (flush && !hold)) begin
         OpCode <= 0;
         rs <= 0;
         rt <= 0;
