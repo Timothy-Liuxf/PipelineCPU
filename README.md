@@ -6,7 +6,7 @@
 
 数字逻辑与处理器基础实验流水线大作业——流水线 CPU  
 
-工具：Vivado 2017.3  
+工具：Vivado 2020.2  
 
 目标设备：xc7a35tcpg236-1  
 
@@ -27,7 +27,7 @@
 
 The big homework of Fundamental Experiment of Digital Logic and Processor——Pipeline CPU  
 
-Tool: Vivado 2017.9  
+Tool: Vivado 2020.2  
 
 Target Device: xc7a35tcpg236-1  
 
