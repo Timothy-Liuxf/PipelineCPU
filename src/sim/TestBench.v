@@ -22,19 +22,19 @@
 
 module TestBench();
 
-    reg clk;
+    reg sysclk;
     reg reset;
     wire [3:0] AN;
     wire [7:0] BCD;
     wire [7:0] leds;
 
-    PipelineCPU PipelineCPU(clk, reset, leds, AN, BCD);
+    PipelineCPU PipelineCPU(sysclk, reset, leds, AN, BCD);
 
     initial begin
-        clk <= 0;
+        sysclk <= 0;
         reset <= 0;
     end
     
-    always #5 clk <= ~clk;
+    always #5 sysclk <= ~sysclk;
     
 endmodule

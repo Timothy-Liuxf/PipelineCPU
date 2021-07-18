@@ -22,12 +22,34 @@
 
 module PipelineCPU
 (
-    input wire clk,
+    input wire sysclk,
     input wire reset,
     output wire [7:0] leds,
     output wire [3:0] AN,
     output wire [7:0] BCD
 );
+
+reg clk;
+reg cnt;
+initial begin
+    cnt <= 0;
+    clk <= 0;
+end
+always @(posedge sysclk or posedge reset) begin
+    if (reset) begin
+        cnt <= 0;
+        clk <= 0;
+    end
+    else begin
+        if (cnt == 1) begin
+            cnt <= 0;
+            clk <= !clk;
+        end
+        else begin
+            cnt <= 1;
+        end
+    end
+end
 
 wire [31:0] PC_i;
 wire [31:0] PC_o;
