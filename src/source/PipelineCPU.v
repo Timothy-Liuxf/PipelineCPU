@@ -29,27 +29,33 @@ module PipelineCPU
     output wire [7:0] BCD
 );
 
-reg clk;
-reg cnt;
-initial begin
-    cnt <= 0;
-    clk <= 0;
-end
-always @(posedge sysclk or posedge reset) begin
-    if (reset) begin
-        cnt <= 0;
-        clk <= 0;
-    end
-    else begin
-        if (cnt == 1) begin
-            cnt <= 0;
-            clk <= !clk;
-        end
-        else begin
-            cnt <= 1;
-        end
-    end
-end
+
+// Divide clock to implement
+
+// reg clk;
+// reg cnt;
+// initial begin
+//     cnt <= 0;
+//     clk <= 0;
+// end
+// always @(posedge sysclk or posedge reset) begin
+//     if (reset) begin
+//         cnt <= 0;
+//         clk <= 0;
+//     end
+//     else begin
+//         if (cnt == 1) begin
+//             cnt <= 0;
+//             clk <= !clk;
+//         end
+//         else begin
+//             cnt <= 1;
+//         end
+//     end
+// end
+
+wire clk;
+assign clk = sysclk;
 
 wire [31:0] PC_i;
 wire [31:0] PC_o;
