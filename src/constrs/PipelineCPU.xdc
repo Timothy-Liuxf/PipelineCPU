@@ -50,5 +50,5 @@ set_property IOSTANDARD LVCMOS33 [get_ports {BCD[5]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {BCD[6]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {BCD[7]}]
 
-create_clock -period 10.00 -name sysclk -waveform {0.000 5.000} -add [get_ports sysclk]
+create_clock -period 11.40 -name sysclk -waveform {0.000 5.700} -add [get_ports sysclk]
 
