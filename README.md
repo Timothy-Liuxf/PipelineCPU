@@ -14,9 +14,9 @@
 
 目录结构：  
 
-+ ans：作业答案  
-
++ assets：作业所用其他资源  
 + docs：作业要求  
++ report：实验报告  
 + test_program：测试用汇编程序  
 + src  
   + constrs：约束文件    
@@ -35,8 +35,9 @@ Author: Timothy-LiuXuefeng
 
 Directory Structure:  
 
-+ ans: The answer of the homework  
++ assets: Other resources for the homework  
 + docs: The requirement of the homework  
++ report: Experiment report
 + test_program: The assembly program for testing  
 + src  
   + constrs: Constraints  
